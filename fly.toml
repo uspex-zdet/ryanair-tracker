@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for ryanair-tracker-2 on 2025-05-05T17:03:56+03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "ryanair-tracker-2"
+primary_region = "ams"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PYTHONUNBUFFERED = "1"
+
+[mounts]
+  source = "ryanair_data"
+  destination = "/app/data"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  auto_stop_machines = false
+  min_machines_running = 1
+
+[processes]
+  app = "python /app/ryanair_price_tracker.py"
