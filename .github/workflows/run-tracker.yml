@@ -12,11 +12,21 @@ jobs:
         run: curl -L https://fly.io/install.sh | sh
       - name: Set up flyctl PATH
         run: echo "$HOME/.fly/bin" >> $GITHUB_PATH
+      - name: Check flyctl version
+        run: flyctl version
+      - name: Check app status
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: flyctl status --app ryanair-tracker-2
       - name: Start Fly.io machine
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         run: flyctl machine start 683d922f660dd8 --app ryanair-tracker-2
+      - name: Create data directory
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: flyctl ssh console -C "mkdir -p /app/data"
       - name: Run script on Fly.io
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: flyctl ssh console -C "mkdir -p /app/data && python /app/ryanair_price_tracker.py" --app ryanair-tracker-2
+        run: flyctl ssh console -C "python /app/ryanair_price_tracker.py"
