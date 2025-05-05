@@ -22,12 +22,14 @@ jobs:
       - name: Start Fly.io machine
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: flyctl machine start 683d922f660dd8 --app ryanair-tracker-2
+        run: flyctl machine start d899046c660d48 --app ryanair-tracker-2
+      - name: Wait for machine to start
+        run: sleep 10  # Задержка 10 секунд
       - name: Create data directory
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: flyctl machine exec 683d922f660dd8 "mkdir -p /app/data" --app ryanair-tracker-2
+        run: flyctl machine exec d899046c660d48 "mkdir -p /app/data" --app ryanair-tracker-2
       - name: Run script on Fly.io
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: flyctl machine exec 683d922f660dd8 "python /app/ryanair_price_tracker.py" --app ryanair-tracker-2
+        run: flyctl machine exec d899046c660d48 "python /app/ryanair_price_tracker.py" --app ryanair-tracker-2
